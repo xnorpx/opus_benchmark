@@ -1,0 +1,73 @@
+name: Opus Benchmark
+
+on: [push, pull_request]
+
+jobs:
+  CMakeBuild:
+    name: CMake/${{ matrix.config.name }}
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+        - {
+            name: "Windows/X86/Release",
+            artifact: "opus-benchmark-win-x86-release.tar.xz",
+            os: windows-latest,
+            config: Release,
+            args: -G "Visual Studio 16 2019" -A Win32
+          }
+        - {
+            name: "Windows/X64/Release",
+            artifact: "opus-benchmark-win-x64-release.tar.xz",
+            os: windows-latest,
+            config: Release,
+            args: -G "Visual Studio 16 2019" -A x64
+          }
+        - {
+            name: "Linux/X64/Release",
+            artifact: "opus-benchmark-linux-x64-release.tar.xz",
+            os: ubuntu-latest,
+            config: Release,
+            args:
+          }
+        - {
+            name: "MacOSX/Dll/X64/Release",
+            artifact: "opus-benchmark-macosx-x64-release.tar.xz",
+            os: macos-latest,
+            config: Release,
+            args:
+          }
+    steps:
+      - uses: actions/checkout@v1
+        # No we need at least CMake 3.15 to use the cmake --install command
+        # Current linux build nodes only have 3.12
+      - name: Install CMake 3.16 on Linux
+        if: matrix.config.os == 'ubuntu-latest'
+        run: |
+          curl -sL https://github.com/Kitware/CMake/releases/download/v3.16.2/cmake-3.16.2-Linux-x86_64.sh -o cmakeinstall.sh
+          chmod +x cmakeinstall.sh
+          sudo ./cmakeinstall.sh --prefix=/usr/local --exclude-subdir
+          rm cmakeinstall.sh
+      - name: Create Work Dir
+        run: mkdir build 
+      - name: Configure
+        working-directory: ./build
+        run: cmake .. ${{ matrix.config.args }}
+      - name: Build
+        working-directory: ./build
+        run: cmake --build . -j 2 --config ${{ matrix.config.config }}
+      - name: Test
+        working-directory: ./build
+        run: ctest -V
+      - name: Install
+        working-directory: ./build
+        run: cmake --install . --config ${{ matrix.config.config }} --prefix opus-benchmark
+      - name: Pack Artifact
+        working-directory: ./build
+        run: cmake -E tar cJfv ${{ matrix.config.artifact }} opus-benchmark
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v1
+        with:
+          path: ./build/${{ matrix.config.artifact }}
+          name: ${{ matrix.config.artifact }}
