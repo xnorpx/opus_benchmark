@@ -8,6 +8,10 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY true)
 set(FETCHCONTENT_QUIET FALSE)
 
+if(MSVC)
+  add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+endif()
+
 FetchContent_Declare(opus
                         GIT_REPOSITORY https://github.com/xiph/opus.git
                         GIT_PROGRESS TRUE

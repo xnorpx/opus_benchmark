@@ -8,7 +8,6 @@
 
 #include "test_data_1_channel_16_khz_pcm.h"
 
-using namespace std;
 constexpr auto BM_UNITS = benchmark::kMillisecond;
 
 constexpr opus_int32 kFs = 16000;
@@ -16,8 +15,29 @@ constexpr int kChannels = 1;
 constexpr size_t kFrameSizeMS = 20;
 constexpr opus_int32 kFrameSizeSamples = kFs / 1000 * kFrameSizeMS;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+FILE* x_file;
+FILE* minInvGain_file;
+FILE* subfr_length_file;
+FILE* nb_subfr_file;
+FILE* D_file;
+#ifdef __cplusplus
+}
+#endif
+
+using namespace std;
+
 auto BM_ENCODE = [](benchmark::State& state, const vector<int16_t>& pcm_data,
                     int complexity) {
+
+    x_file = fopen("x.data", "wb");
+    minInvGain_file = fopen("minInvGain.data", "wb");
+    subfr_length_file = fopen("subfr_length.data", "wb");
+    nb_subfr_file = fopen("nb_subfr.data", "wb");
+    D_file = fopen("D.data", "wb");
+
     opus_int32 ret = OPUS_OK;
     std::vector<uint8_t> payload(1500);
 
@@ -56,6 +76,12 @@ auto BM_ENCODE = [](benchmark::State& state, const vector<int16_t>& pcm_data,
     }
 
     opus_encoder_destroy(encoder);
+
+    fclose(x_file);
+    fclose(minInvGain_file);
+    fclose(subfr_length_file);
+    fclose(nb_subfr_file);
+    fclose(D_file);
 };
 
 int main(int, char**) {
@@ -73,6 +99,7 @@ int main(int, char**) {
     benchmark::RegisterBenchmark("Encode_1_channel_16kHz_Complexity_0",
                                  BM_ENCODE, pcm_data, 0)
         ->Unit(BM_UNITS);
+#if 0
     benchmark::RegisterBenchmark("Encode_1_channel_16kHz_Complexity_1",
                                  BM_ENCODE, pcm_data, 1)
         ->Unit(BM_UNITS);
@@ -100,5 +127,6 @@ int main(int, char**) {
     benchmark::RegisterBenchmark("Encode_1_channel_16kHz_Complexity_9",
                                  BM_ENCODE, pcm_data, 9)
         ->Unit(BM_UNITS);
+#endif
     benchmark::RunSpecifiedBenchmarks();
 }
