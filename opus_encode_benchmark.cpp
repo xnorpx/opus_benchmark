@@ -15,28 +15,10 @@ constexpr int kChannels = 1;
 constexpr size_t kFrameSizeMS = 20;
 constexpr opus_int32 kFrameSizeSamples = kFs / 1000 * kFrameSizeMS;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-FILE* x_file;
-FILE* minInvGain_file;
-FILE* subfr_length_file;
-FILE* nb_subfr_file;
-FILE* D_file;
-#ifdef __cplusplus
-}
-#endif
-
 using namespace std;
 
 auto BM_ENCODE = [](benchmark::State& state, const vector<int16_t>& pcm_data,
                     int complexity) {
-
-    x_file = fopen("x.data", "wb");
-    minInvGain_file = fopen("minInvGain.data", "wb");
-    subfr_length_file = fopen("subfr_length.data", "wb");
-    nb_subfr_file = fopen("nb_subfr.data", "wb");
-    D_file = fopen("D.data", "wb");
 
     opus_int32 ret = OPUS_OK;
     std::vector<uint8_t> payload(1500);
@@ -76,12 +58,6 @@ auto BM_ENCODE = [](benchmark::State& state, const vector<int16_t>& pcm_data,
     }
 
     opus_encoder_destroy(encoder);
-
-    fclose(x_file);
-    fclose(minInvGain_file);
-    fclose(subfr_length_file);
-    fclose(nb_subfr_file);
-    fclose(D_file);
 };
 
 int main(int, char**) {
@@ -98,35 +74,35 @@ int main(int, char**) {
     cout << "Encoding " << test_time_seconds << " [s] of speech.\n";
     benchmark::RegisterBenchmark("Encode_1_channel_16kHz_Complexity_0",
                                  BM_ENCODE, pcm_data, 0)
-        ->Unit(BM_UNITS);
+        ->Unit(BM_UNITS)->Repetitions(64);
 #if 0
     benchmark::RegisterBenchmark("Encode_1_channel_16kHz_Complexity_1",
                                  BM_ENCODE, pcm_data, 1)
-        ->Unit(BM_UNITS);
+        ->Unit(BM_UNITS)->Repetitions(16);
     benchmark::RegisterBenchmark("Encode_1_channel_16kHz_Complexity_2",
                                  BM_ENCODE, pcm_data, 2)
-        ->Unit(BM_UNITS);
+        ->Unit(BM_UNITS)->Repetitions(16);
     benchmark::RegisterBenchmark("Encode_1_channel_16kHz_Complexity_3",
                                  BM_ENCODE, pcm_data, 3)
-        ->Unit(BM_UNITS);
+        ->Unit(BM_UNITS)->Repetitions(16);
     benchmark::RegisterBenchmark("Encode_1_channel_16kHz_Complexity_4",
                                  BM_ENCODE, pcm_data, 4)
-        ->Unit(BM_UNITS);
+        ->Unit(BM_UNITS)->Repetitions(16);
     benchmark::RegisterBenchmark("Encode_1_channel_16kHz_Complexity_5",
                                  BM_ENCODE, pcm_data, 5)
-        ->Unit(BM_UNITS);
+        ->Unit(BM_UNITS)->Repetitions(16);
     benchmark::RegisterBenchmark("Encode_1_channel_16kHz_Complexity_6",
                                  BM_ENCODE, pcm_data, 6)
-        ->Unit(BM_UNITS);
+        ->Unit(BM_UNITS)->Repetitions(16);
     benchmark::RegisterBenchmark("Encode_1_channel_16kHz_Complexity_7",
                                  BM_ENCODE, pcm_data, 7)
-        ->Unit(BM_UNITS);
+        ->Unit(BM_UNITS)->Repetitions(16);
     benchmark::RegisterBenchmark("Encode_1_channel_16kHz_Complexity_8",
                                  BM_ENCODE, pcm_data, 8)
-        ->Unit(BM_UNITS);
+        ->Unit(BM_UNITS)->Repetitions(16);
     benchmark::RegisterBenchmark("Encode_1_channel_16kHz_Complexity_9",
                                  BM_ENCODE, pcm_data, 9)
-        ->Unit(BM_UNITS);
+        ->Unit(BM_UNITS)->Repetitions(64);
 #endif
     benchmark::RunSpecifiedBenchmarks();
 }
