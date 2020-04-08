@@ -11,32 +11,88 @@ jobs:
       matrix:
         config:
         - {
-            name: "Windows/X86/Release",
+            name: "Windows/X86/Release/Default",
             artifact: "opus-benchmark-win-x86-release.tar.xz",
             os: windows-latest,
             config: Release,
             args: -G "Visual Studio 16 2019" -A Win32
           }
         - {
-            name: "Windows/X64/Release",
+            name: "Windows/X64/Release/Default",
             artifact: "opus-benchmark-win-x64-release.tar.xz",
             os: windows-latest,
             config: Release,
             args: -G "Visual Studio 16 2019" -A x64
           }
         - {
-            name: "Linux/X64/Release",
+            name: "Linux/X64/Release/Default",
             artifact: "opus-benchmark-linux-x64-release.tar.xz",
             os: ubuntu-latest,
             config: Release,
             args:
           }
         - {
-            name: "MacOSX/Dll/X64/Release",
+            name: "MacOSX/Dll/X64/Release/Default",
             artifact: "opus-benchmark-macosx-x64-release.tar.xz",
             os: macos-latest,
             config: Release,
             args:
+          }
+        - {
+            name: "Windows/X86/Release/FixedPoint",
+            artifact: "opus-benchmark-win-x86-release.tar.xz",
+            os: windows-latest,
+            config: Release,
+            args: -G "Visual Studio 16 2019" -A Win32 -DOPUS_FIXED_POINT=ON
+          }
+        - {
+            name: "Windows/X64/Release/FixedPoint",
+            artifact: "opus-benchmark-win-x64-release.tar.xz",
+            os: windows-latest,
+            config: Release,
+            args: -G "Visual Studio 16 2019" -A x64 -DOPUS_FIXED_POINT=ON
+          }
+        - {
+            name: "Linux/X64/Release/FixedPoint",
+            artifact: "opus-benchmark-linux-x64-release.tar.xz",
+            os: ubuntu-latest,
+            config: Release,
+            args: -DOPUS_FIXED_POINT=ON
+          }
+        - {
+            name: "MacOSX/Dll/X64/Release/FixedPoint",
+            artifact: "opus-benchmark-macosx-x64-release.tar.xz",
+            os: macos-latest,
+            config: Release,
+            args: -DOPUS_FIXED_POINT=ON
+          }
+        - {
+            name: "Windows/X86/Release/FixedPointPresume",
+            artifact: "opus-benchmark-win-x86-release.tar.xz",
+            os: windows-latest,
+            config: Release,
+            args: -G "Visual Studio 16 2019" -A Win32 -DOPUS_FIXED_POINT=ON -DOPUS_X86_PRESUME_SSE4_1=ON -DOPUS_X86_PRESUME_AVX=ON -DOPUS_ENABLE_FAST_MATH=ON -DOPUS_STACK_PROTECTOR=OFF
+          }
+        - {
+            name: "Windows/X64/Release/FixedPointPresume",
+            artifact: "opus-benchmark-win-x64-release.tar.xz",
+            os: windows-latest,
+            config: Release,
+            args: -G "Visual Studio 16 2019" -A x64 -DOPUS_FIXED_POINT=ON -DOPUS_X86_PRESUME_SSE4_1=ON -DOPUS_X86_PRESUME_AVX=ON -DOPUS_ENABLE_FAST_MATH=ON -DOPUS_STACK_PROTECTOR=OFF
+          }
+        - {
+            name: "Linux/X64/Release/FixedPointPresume",
+            artifact: "opus-benchmark-linux-x64-release.tar.xz",
+            os: ubuntu-latest,
+            config: Release,
+            args: -DOPUS_FIXED_POINT=ON -DOPUS_X86_PRESUME_SSE4_1=ON -DOPUS_X86_PRESUME_AVX=ON -DOPUS_ENABLE_FAST_MATH=ON -DOPUS_STACK_PROTECTOR=OFF
+          }
+        - {
+            name: "MacOSX/Dll/X64/Release/FixedPointPresume",
+            artifact: "opus-benchmark-macosx-x64-release.tar.xz",
+            os: macos-latest,
+            config: Release,
+            args: -DOPUS_FIXED_POINT=ON -DOPUS_X86_PRESUME_SSE4_1=ON -DOPUS_X86_PRESUME_AVX=ON -DOPUS_ENABLE_FAST_MATH=ON -DOPUS_STACK_PROTECTOR=OFF
           }
     steps:
       - uses: actions/checkout@v1
