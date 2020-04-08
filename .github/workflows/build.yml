@@ -32,7 +32,7 @@ jobs:
             args:
           }
         - {
-            name: "MacOSX/Dll/X64/Release/Default",
+            name: "MacOSX/X64/Release/Default",
             artifact: "opus-benchmark-macosx-x64-release.tar.xz",
             os: macos-latest,
             config: Release,
@@ -60,7 +60,7 @@ jobs:
             args: -DOPUS_FIXED_POINT=ON
           }
         - {
-            name: "MacOSX/Dll/X64/Release/FixedPoint",
+            name: "MacOSX/X64/Release/FixedPoint",
             artifact: "opus-benchmark-macosx-x64-release.tar.xz",
             os: macos-latest,
             config: Release,
@@ -88,7 +88,7 @@ jobs:
             args: -DOPUS_FIXED_POINT=ON -DOPUS_X86_PRESUME_SSE4_1=ON -DOPUS_X86_PRESUME_AVX=ON -DOPUS_ENABLE_FAST_MATH=ON -DOPUS_STACK_PROTECTOR=OFF
           }
         - {
-            name: "MacOSX/Dll/X64/Release/FixedPointPresume",
+            name: "MacOSX/X64/Release/FixedPointPresume",
             artifact: "opus-benchmark-macosx-x64-release.tar.xz",
             os: macos-latest,
             config: Release,

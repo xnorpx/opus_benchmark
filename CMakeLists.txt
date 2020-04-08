@@ -26,6 +26,7 @@ FetchContent_Declare(benchmark
                         USES_TERMINAL_DOWNLOAD
                         TRUE)
 
+
 FetchContent_GetProperties(benchmark)
 if(NOT benchmark_POPULATED)
   FetchContent_Populate(benchmark)
