@@ -15,8 +15,6 @@ endif()
 FetchContent_Declare(opus
                         GIT_REPOSITORY https://github.com/xnorpx/opus.git
                         GIT_PROGRESS TRUE
-                        GIT_BRANCH dev/cmakefixes2
-                        GIT_TAG dev/cmakefixes2
                         USES_TERMINAL_DOWNLOAD
                         TRUE)
 
@@ -49,7 +47,8 @@ enable_testing()
 add_executable(opus_encode_benchmark 
                test_data_1_channel_16_khz_pcm.h
                test_data_1_channel_16_khz_pcm.cpp
-               opus_encode_benchmark.cpp)
+               opus_encode_benchmark.cpp
+               tone.hpp)
 
 target_compile_options(opus_encode_benchmark PRIVATE
      $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:

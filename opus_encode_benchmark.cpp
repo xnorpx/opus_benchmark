@@ -74,7 +74,8 @@ int main(int, char**) {
     cout << "Encoding " << test_time_seconds << " [s] of speech.\n";
     benchmark::RegisterBenchmark("Encode_1_channel_16kHz_Complexity_0",
                                  BM_ENCODE, pcm_data, 0)
-        ->Unit(BM_UNITS)->Repetitions(64);
+        ->Unit(BM_UNITS)
+	->Repetitions(32);
 #if 0
     benchmark::RegisterBenchmark("Encode_1_channel_16kHz_Complexity_1",
                                  BM_ENCODE, pcm_data, 1)
